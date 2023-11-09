@@ -7,7 +7,7 @@ if (!"stf" %in% installed.packages()){
 }
 library(stf)
 #
-# Download dos acórdãos do STF com o termo "internacional"
+# Download dos acórdãos do STF com o termo "internacional": 2947 casos iniciais reduzida para 1101 casos após exclusão dos casos em citação a legislação estrangeira
 dir.create("Raw")
 
 stf::stf_baixar_cjsg("internacional", 
@@ -300,8 +300,7 @@ sub_internacional <- sub_internacional %>%
 sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "CONVENCAO DA ONU CONTRA A CORRUPCAO CONVENCAO DE MERIDA", "CONVENCAO DAS NACOES UNIDAS CONTRA A CORRUPCAO"))
 sub_internacional <- sub_internacional %>%
-  mutate(nome = str_replace_all(nome, "3
-CONVENCAO DAS NACOES UNIDAS CONTRA A CORRUPCAO ", "CONVENCAO DAS NACOES UNIDAS CONTRA A CORRUPCAO"))
+  mutate(nome = str_replace_all(nome, "CONVENCAO DAS NACOES UNIDAS CONTRA A CORRUPCAO ", "CONVENCAO DAS NACOES UNIDAS CONTRA A CORRUPCAO"))
 sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "ADOTADA NAQUELA CIDADE EM 22 DE MAIO DE 2001 ", ""))
 sub_internacional <- sub_internacional %>%
@@ -430,6 +429,162 @@ sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "ASSINADA NO RIO DE JANEIRO EM 05 DE JUNHO DE 1992", ""))
 sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "ASSINADA EM BRASILIA", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONCLUIDA EM GENEBRA A 29 DE ABRIL DE 1958", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO PARA A REDUCAO DOS CASOS SOBRE O ESTATUTO DOS APATRIDIA", "CONVENCAO PARA A REDUCAO DOS CASOS DE APATRIDIA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "FIRMADA PELOS PLENIPOTENCIARIOS DBRASIL NA SEGUNDA CONFERENCIA DA PAZ EM 1907 NA HAYA", "NA SEGUNDA CONFERENCIA DE PAZ DE 1907"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO OIT SOBRE POVOS INDIGENAS E TRIBAIS", "CONVENCAO NO 169 OIT SOBRE POVOS INDIGENAS E TRIBAIS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = ifelse(str_detect(nome, "ASBESTO"), "CONVENCAO Nº 162 OIT SOBRE A UTILIZACAO DO ASBESTO COM SEGURANCA", nome))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = ifelse(str_detect(nome, "CONVENCAO SOBRE O TERMINO DA RELACAO DE TRABALHO POR INICIATIVA DO EMPREGADOR"), "CONVENCAO SOBRE O TERMINO DA RELACAO DE TRABALHO POR INICIATIVA DO EMPREGADOR OIT", nome))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = ifelse(str_detect(nome, "CONVENCAO SOBRE O TRABALHO FORCADO OU OBRIGATORIO"), "CONVENCAO SOBRE O TRABALHO FORCADO OU OBRIGATORIO OIT", nome))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = ifelse(str_detect(nome, "CONVENCAO SOBRE OS DIREITOS DA CRIANCA"), "CONVENCAO SOBRE OS DIREITOS DAS CRIANCAS", nome))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONCLUIDA NA CIDADE DE HAIA EM 25 DE OUTUBRO DE 1980", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO SOBRE OS POVOS INDIGENAS E TRIBAIS OIT", "CONVENCAO SOBRE POVOS INDIGENAS E TRIBAIS OIT"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ADOTADA A 21 DE NOVEMBRO DE 1947 PELA ASSEMBLEIA GERAL DAS NACOES UNIDAS", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ADOTADA EM LONDRES A 13 DE FEVEREIRO DE 1946 POR OCASIAO DA ASSEMBLEIA GERAL DAS NACOES UNIDAS", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ADOTADA EM 10 DE SETEMBRO DE 1998 NA CIDADE DE ROTERDA", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CELEBRADA EM VIENA", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO SOBRE SUBSTANCIAS PSICOTROPICAS CONVENCAO DE VIENA", "CONVENCAO SOBRE SUBSTANCIAS PSICOTROPICAS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONHECIDA COMO CONVENCAO DE RAMSAR DE 02 DE FEVEREIRO DE 1971", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ESTUPEFACIENTES", "ENTORPECENTES"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONCLUIDA EM GENEBRA A 6 DE SETEMBRO DE 1952", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO UNICA SOBRE ENTORPECENTES", "CONVENCAO UNICA DE NOVA IORQUE SOBRE ENTORPECENTES"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONCLUIDA EM LONDRES A 29 DE DEZEMBRO DE 1972", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "PACTO INTERNACIONAL DOS DIREITOS CIVIS E POLITICOS 1966", "PACTO INTERNACIONAL DOS DIREITOS CIVIS E POLITICOS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "EPOLITICOS", "E POLITICOS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "POLITICOS ONU", "POLITICOS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ACORDADO NA 58ª ASSEMBLEIA GERAL DA ORGANIZACAO MUNDIAL DE SAUDE EM 23 DE MAIO DE 2005", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "A CONVENCAO QUADRO DAS NACOES UNIDAS SOBRE MUDANCA DO CLIMA ABERTO A ASSINATURAS NA CIDADE DE QUIOTO JAPAO EM 11 DE DEZEMBRO DE 1997 POR OCASIAO DA TERCEIRA CONFERENCIA DAS PARTES DA CONVENCAO QUADRO DAS NACOES UNIDAS SOBRE MUDANCA DO CLIMA", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "TRATADBRASIL", "TRATADO BRASIL"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "APORTUGAL ", "PORTUGAL"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "PERTENCENTES EM CONDOMINIO AOS DOIS PAISES DESDE E INCLUSIVE O SALTO GRANDE DE SETE QUEDAS OU SALTO DE GUAIRA ATE A FOZ DO RIO IGUACU", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CELEBRADO EM PORTO SEGURO EM 22 DE ABRIL DE 2", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "O GOVERNO DO ", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, " CELEBRADO EM BRASILIA EM 27 DE JANEIRO DE 1995", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "NAVEGACABRASIL", "NAVEGACAO BRASIL"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "E O URUGUAI ", "E URUGUAI "))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "RIO DE JANEIRO 25 DE AGOSTO DE 1933", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ASUICA", "SUICA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "A 6 DE MAIO DE 1953", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "PROTOCOLO DE MONTREAL 1", "PROTOCOLO DE MONTREAL "))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "PROTOCOLO DE MONTREAL 2", "PROTOCOLO DE MONTREAL "))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "PROTOCOLO ADICIONAL ASSINADO EM MONTREAL EM 25 DE SETEMBRO DE 1975 QUE MODIFICA A CONVENCAO PARA A UNIFICACAO DE CERTAS REGRAS RELATIVAS AO TRANSPORTE AEREO INTERNACIONAL CONCLUIDA EM VARSOVIA EM 12 DE OUTUBRO DE 1929 E EMENDADA PELO PROTOCOLO CELEBRADO NA HAIA EM 28 DE SETEMBRO DE 1955", "PROTOCOLO DE MONTREAL "))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, " DE ", " "))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, " DOS ", " "))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "E O URUGUAI", "E URUGUAI"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "E A PERU", "E PERU"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "E A REPUBLICA ITALIANA 17 OUTUBRO 1989", "E ITALIA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "FIRMADO EM BRASILIA EM 12 NOVEMBRO 2004", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, " E A REPUBLICA POPULAR DA CHINA", " E CHINA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "DA BOLIVIA E DA CHILE", "BOLIVIA E CHILE"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "^3 ", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "^A ", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ONU ONU", "ONU"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "FIRMADA EM CIDADE DA PRAIA CABO VERDE EM 23 NOVEMBRO 2005", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ACORDO EXTRADICAO ESTADOS PARTES DO MERCOSUL E A BOLIVIA E A CHILE", "ACORDO EXTRADICAO ESTADOS PARTES DO MERCOSUL BOLIVIA E CHILE"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "TRATADO EXTRADICAO OS ESTADOS PARTES DO MERCOSUL E AS REPUBLICAS DA BOLIVIA E DO CHILE", "TRATADO EXTRADICAO ESTADOS PARTES DO MERCOSUL BOLIVIA E CHILE"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "E A REPUBLICA ITALIANA", "E ITALIA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "TRATADO EXTRADICAO OS PAISES PARTE DO MERCOSUL BOLIVIA E CHILE", "TRATADO EXTRADICAO ESTADOS PARTES DO MERCOSUL BOLIVIA E CHILE"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "PACTO INTERNACIONAL SOBRE DIREITOS CIVIS E POLITICOS ONU", "PACTO INTERNACIONAL SOBRE DIREITOS CIVIS E POLITICOS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "PACTO INTERNACIONAL SOBRE OS DIREITOS CIVIS E POLITICOS", "PACTO INTERNACIONAL SOBRE DIREITOS CIVIS E POLITICOS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "DA ORGANIZACAO INTERNACIONAL DO TRABALHO OIT", "OIT"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ADOTADA PELA CONFERENCIA EM SUA TRIGESIMA SESSAO GENEBRA 19 JUNHO 1947", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "DA ORGANIZACAO INTERNACIONAL DO TRABALHO OIT", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO CONCERNENTE A INSPECAO DO TRABALHO NA INDUSTRIA E NO COMERCIO OIT", "CONVENCAO CONCERNENTE A INSPECAO DO TRABALHO NA INDUSTRIA E NO COMERCIO"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO RELATIVA A APLICACAO PRINCIPIOS DO DIREITO ORGANIZACAO E NEGOCIACAO COLETIVA OIT", "CONVENCAO N° 98 RELATIVA A APLICACAO PRINCIPIOS DO DIREITO ORGANIZACAO E NEGOCIACAO COLETIVA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO SOBRE A ABOLICAO DO TRABALHO FORCADO OIT", "CONVENCAO RELATIVA A ABOLICAO DO TRABALHO FORCADO"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO A RECOMENDACAO Nº 146 SOBRE IDADE MINIMA ADMISSAO AO EMPREGO OIT", "CONVENCAO SOBRE A IDADE MINIMA OIT"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO OIT SOBRE A PREVENCAO E O CONTROLE RISCOS PROFISSIONAIS CAUSADOS PELAS SUBSTANCIAS OU AGENTES CANCERIGENOS", "CONVENCAO SOBRE A PREVENCAO E O CONTROLE RISCOS PROFISSIONAIS CAUSADOS PELAS SUBSTANCIAS OU AGENTES CANCERIGENOS OIT"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "DA ORGANIZACAO INTERNACIONAL DO TRABALHO", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "TRATADO EXTRADICAO OS PAISES PARTE DO MERCOSUL DA BOLIVIA E DA CHILE", "TRATADO EXTRADICAO MERCOSUL BOLIVIA E CHILE"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "TRATADO EXTRADICAO OS ESTADOS PARTES DO MERCOSUL E AS REPUBLICAS DA BOLIVIA E DO CHILE", "TRATADO EXTRADICAO MERCOSUL BOLIVIA E CHILE"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "APORTUGAL", "PORTUGAL"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "A CONFEDERACAO SUICA CELEBRADO EM BERNA EM 12 MAIO 2004", "SUICA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "A CONFEDERACAO SUICA", "SUICA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "TRATADO COOPERACAO JUDICIAL BRASIL E SUICA", "TRATADO COOPERACAO JURIDICA EM MATERIA PENAL BRASIL E SUICA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO SOBRE SUBSTANCIAS PSICOTROPICAS CONVENCAO VIENA", "CONVENCAO SOBRE SUBSTANCIAS PSICOTROPICAS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO SOBRE SEGURANCA E SAUDE TRABALHADORES E O MEIO AMBIENTE TRABALHO OIT", "CONVENCAO SOBRE SEGURANCA E SAUDE TRABALHADORES E O MEIO AMBIENTE TRABALHO"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO SOBRE OS POVOS INDIGENAS E TRIBAIS OIT", "CONVENCAO SOBRE POVOS INDIGENAS E TRIBAIS OIT"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO SOBRE O INCENTIVO A NEGOCIACAO COLETIVA OIT", "CONVENCAO SOBRE O INCENTIVO A NEGOCIACAO COLETIVA"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ASSINADA DURANTE A CONFERENCIA DAS NACOES UNIDAS SOBRE MEIO AMBIENTE E DESENVOLVIMENTO", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO SOBRE POVOS INDIGENAS E TRIBAIS OIT", "CONVENCAO SOBRE POVOS INDIGENAS E TRIBAIS"))
 # Removendo espaços duplicados
 for (coluna in colnames(sub_internacional)) {
   sub_internacional[[coluna]] <- gsub("\\s+", " ", sub_internacional[[coluna]])
@@ -442,9 +597,9 @@ rm(coluna)
 rm(regex)
 rm(temp_df)
 save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
-
+# Ao final, há menção há cerca de 230 atos internacionais (Falta concluir a limpeza)
 #
 tipos_unicos <- as.data.frame(unique(sub_internacional$nome))
-
+print(base_sem_acento$documental_legislacao_citada_texto[1191])
 
 
