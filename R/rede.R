@@ -220,11 +220,12 @@ for (coluna in colnames(sub_internacional)) {
 for (coluna in colnames(sub_internacional)) {
   sub_internacional[[coluna]] <- trimws(sub_internacional[[coluna]])
 }
+rm(coluna)
+rm(regex)
+rm(temp_df)
 save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
 #
 tipos_unicos <- as.data.frame(unique(sub_internacional$nome))
-print(base_sem_acento$documental_legislacao_citada_texto[144])
-# Suponha que 'df' é seu dataframe
-teste <- sub_internacional[is.na(sub_internacional$julgamento_data), ]
+
 
 
