@@ -603,4 +603,8 @@ save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
 tipos_unicos <- as.data.frame(unique(sub_internacional$nome))
 print(base_sem_acento$documental_legislacao_citada_texto[1191])
 
-
+# Adicionar a coluna competência
+sub_internacional <- sub_internacional %>%
+  mutate(competencia = ifelse(grepl("\\s{2,}", titulo), "recursal", ifelse(grepl("^\\S+ \\S+$", titulo), "originaria", NA)))
+sub_internacional <- sub_internacional %>%
+  mutate(competencia = replace(competencia, is.na(competencia), "recursal"))
