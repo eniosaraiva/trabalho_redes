@@ -597,7 +597,7 @@ for (coluna in colnames(sub_internacional)) {
 rm(coluna)
 rm(regex)
 rm(temp_df)
-save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
+
 # Ao final, há menção há cerca de 230 atos internacionais (Falta concluir a limpeza)
 #
 tipos_unicos <- as.data.frame(unique(sub_internacional$nome))
@@ -608,3 +608,10 @@ sub_internacional <- sub_internacional %>%
   mutate(competencia = ifelse(grepl("\\s{2,}", titulo), "recursal", ifelse(grepl("^\\S+ \\S+$", titulo), "originaria", NA)))
 sub_internacional <- sub_internacional %>%
   mutate(competencia = replace(competencia, is.na(competencia), "recursal"))
+
+# Criar a coluna "classe" no dataframe sub_internacional
+sub_internacional <- sub_internacional %>%
+  mutate(classe = str_extract(titulo, "[A-Za-z]+(?=\\s*\\d)"))
+
+#
+save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
