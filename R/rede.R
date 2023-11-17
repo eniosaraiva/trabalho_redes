@@ -8,6 +8,7 @@ if (!"stf" %in% installed.packages()){
 library(stf)
 #
 # Download dos acórdãos do STF com o termo "internacional": 2947 casos iniciais reduzida para 1101 casos após exclusão dos casos em citação a legislação estrangeira
+#Período: 06/1950 a 07/2023
 dir.create("Raw")
 
 stf::stf_baixar_cjsg("internacional", 
