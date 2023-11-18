@@ -613,5 +613,185 @@ sub_internacional <- sub_internacional %>%
 sub_internacional <- sub_internacional %>%
   mutate(classe = str_extract(titulo, "[A-Za-z]+(?=\\s*\\d)"))
 
+# Criar a coluna contraparte
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(grepl("FRANCA", nome), "FRANCA", NA))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(grepl("SUICA", nome), "SUICA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(grepl("EUA", nome), "EUA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(grepl("MERCOSUL", nome), "MERCOSUL", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ARGENTINA", nome), "ARGENTINA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ITALIA", nome), "ITALIA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("URUGUAI", nome), "URUGUAI", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PERU", nome), "PERU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("GATT", nome), "OMC", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PACTO SAO JOSE DA COSTA", nome), "OEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO AMERICANA", nome), "OEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("NACOES UNIDAS", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PORTUGAL", nome), "PORTUGAL", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ESPANHA", nome), "ESPANHA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PARAGUAI", nome), "PARAGUAI", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CHINA", nome), "CHINA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("GRA BRETANHA", nome), "REINO UNIDO", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("COLOMBIA", nome), "COLOMBIA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("OIT", nome), "OIT", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("OMC", nome), "OMC", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("HOLANDA", nome), "HOLANDA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ONU", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO INTERAMERICANA", nome), "OEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("SANTA SE", nome), "VATICANO", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ITAIPU", nome), "PARAGUAI", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PACTO INTERNACIONAL SOBRE DIREITOS ECONOMICO", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PACTO INTERNACIONAL SOBRE DIREITOS CIVIS E POLI", nome), "OEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ACORDO GERAL SOBRE TARIFAS ADUANEIRAS E COMERCIO", nome), "OMC", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE SEGURANCA E SAUDE TRABALHA", nome), "OIT", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE A ELIMINACAO TODAS AS FORMAS", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("REGULAMENTO SANITARIO INTERNACIONAL", nome), "OMS", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO EUROPEIA SOBRE EXTRADICAO", nome), "UE", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO VARSOVIA", nome), "ICAO", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("MEXICO", nome), "MEXICO", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("TRATADO ASSUNCAO", nome), "MERCOSUL", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("REFUGIADOS", nome), "ACNUR", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PACTO INTERNACIONAL DIREITOS CIVIS E POLITICOS", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO EXTRADICAO OS ESTADOS MEMBROS DA", nome), "CPLP", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE OS DIREITOS DAS PESSOAS COM", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE OS DIREITOS DAS CRIANCAS", nome), "UNICEF", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("RACIAL", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ACORDO SOBRE SUBSIDIOS E MEDIDAS COMPENSATORIAS", nome), "OMC", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("BASILEIA", nome), "PNUMA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE O CONTROLE MOVIMENTOS", nome), "PNUMA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE PREVENCAO DA POLUICAO MARINHA", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ACORDO SOBRE BARREIRAS TECNICAS AO COMERCIO", nome), "OMC", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE PROCEDIMENTO CONSENTIMENTO", nome), "PNUMA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE A IMPRESCRITIBILIDADE CRIMES", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE DIVERSIDADE BIOLOGICA", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO VIENA SOBRE RELACOES DIPLOMATICAS", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO VIENA SOBRE O DIREITO TRATADOS", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("SEGURANCA NUCLEAR", nome), "AIEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ARMAS NUCLEARES", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PROTOCOLO SAN SALVADOR", nome), "OEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ACORDO SOBRE A APLICACAO MEDIDAS SANITARIAS E", nome), "OMC", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PAISES BAIXOS", nome), "PAISES BAIXOS", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO EUROPEIA DIREITOS DO HOMEM", nome), "CONSELHO EUROPA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("DOMINICANA", nome), "REP DOMINICANA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO VIENA CONTRA O TRAFICO ILICITO", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO CONTRA O TRAFICO ILICITO", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE O MAR TERRITORIAL A ZONA", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PROTOCOLO CONTRA A FABRICACAO E O TRAFICO ", nome), "UNODC", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PROTOCOLO MONTREAL", nome), "PNUD", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO MONTREAL", nome), "ICAO", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO EUROPEIA DIREITOS HUMANOS", nome), "CONSELHO EUROPA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ACORDO SOBRE ASPECTOS DIREITOS PROPRIEDADE", nome), "OMC", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("TRIBUNAL", nome), "TPI", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("AEREO", nome), "ICAO", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("PACTO SOBRE DIREITOS ECONOMICOS SOCIAIS E", nome), "OEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("BELGICA", nome), "BELGICA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE O ESTATUTO APATRIDAS", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("APATRIDIA", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO VIENA SOBRE RELACOES CONSULARES", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO UNICA NOVA IORQUE SOBRE ENTORPECENTES", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO EUROPEIA SOBRE IMUNIDADE ESTADOS", nome), "CONSELHO EUROPA", contraparte))
+sub_internacional$contraparte <- gsub("CONSELHO DA EUROPA", "CONSELHO EUROPA", sub_internacional$contraparte)
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE O INCENTIVO A NEGOCIACAO", nome), "OIT", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO HAIA SOBRE OS ASPECTOS CIVIS DO", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("BUSTAMENTE", nome), "DIVERSOS", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO CONTRA A TORTURA E OUTROS TRATA", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("NEGOCIACAO COLETIVA", nome), "OIT", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE POVOS INDIGENAS E TRIBAIS", nome), "OIT", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CIDH", nome), "OEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ESTADOS AMERICANOS", nome), "OEA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CANADA", nome), "CANADA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("TRABALHO", nome), "OIT", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("CONVENCAO SOBRE SUBSTANCIAS PSICOTROPICAS", nome), "ONU", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ROMENIA", nome), "ROMENIA", contraparte))
+sub_internacional <- sub_internacional %>%
+  mutate(contraparte = ifelse(is.na(contraparte) & grepl("ESTADOS UNIDOS", nome), "EUA", contraparte))
+observacoes_na <- filter(sub_internacional, is.na(contraparte))
+
 #
 save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
