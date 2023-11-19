@@ -1,13 +1,13 @@
 #Instação de pacotes
 install.packages("pacman")
 pacman::p_load(
-  tidyverse, igraph, remotes, abjutils, tm, stopwords)
+  tidyverse, igraph, remotes, abjutils, tm, stopwords, kableExtra)
 if (!"stf" %in% installed.packages()){
   remotes::install_github("jjesusfilho/stf")
 }
 library(stf)
 #
-# Download dos acórdãos do STF com o termo "internacional": 2947 casos iniciais reduzida para 1101 casos após exclusão dos casos em citação a legislação estrangeira
+# Download dos acórdãos do STF com o termo "internacional": 2947 observações iniciais (2325 casos distintos) reduzida para 1101 observações (552 casos) após exclusão dos casos sem citação a legislação estrangeira
 #Período: 06/1950 a 07/2023
 dir.create("Raw")
 
@@ -1035,7 +1035,33 @@ sub_internacional <- sub_internacional %>%
   mutate(tema = ifelse(is.na(tema) & grepl("INDIGENAS", nome), "TRABALHO", tema))
 sub_internacional <- sub_internacional %>%
   mutate(tema = ifelse(is.na(tema), "DIP", tema))
+sub_internacional$tema <- gsub("DROGAS", "DROGA", sub_internacional$tema)
 #observacoes_na <- filter(sub_internacional, is.na(tema))
 
+## Tabela do dataset
+nomes_colunas <- colnames(sub_internacional)
+tabela <- kable(sub_internacional) %>%
+  add_header_above(nomes_colunas)
+print(tabela)
+rm(nomes_colunas)
+rm(tabela)
 
+# 552 processos únicos
+sub_internacional %>% 
+  distinct(id) %>% 
+  n_distinct()
+
+base_original %>% 
+  distinct(id) %>% 
+  n_distinct()
+
+# Calcular a tabela de frequência da coluna "tema"
+tabela_frequencia <- sub_internacional %>%
+  count(tema) %>%
+  arrange(desc(n))
+tabela_frequencia %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+rm(tabela_frequencia)
+# Salvando a base tratada
 save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
