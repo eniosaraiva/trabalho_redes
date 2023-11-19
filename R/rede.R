@@ -1063,5 +1063,103 @@ tabela_frequencia %>%
   kable() %>%
   kable_styling(bootstrap_options = "striped", full_width = FALSE)
 rm(tabela_frequencia)
-# Salvando a base tratada
+
+# Calcular a tabela de frequência da coluna "contraparte"
+tabela_frequencia <- sub_internacional %>%
+  count(contraparte) %>%
+  arrange(desc(n))
+parte1 <- tabela_frequencia[1:ceiling(nrow(tabela_frequencia)/2), ]
+parte2 <- tabela_frequencia[(ceiling(nrow(tabela_frequencia)/2) + 1):nrow(tabela_frequencia), ]
+tabela_com_duas_colunas <- kbl(list(parte1, parte2), align = "c") %>%
+  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+print(tabela_com_duas_colunas)
+rm(tabela_frequencia)
+rm(parte1)
+rm(parte2)
+
+# Calcular a tabela de frequência da coluna "tipo"
+tabela_frequencia <- sub_internacional %>%
+  count(tipo) %>%
+  arrange(desc(n))
+tabela_frequencia %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+rm(tabela_frequencia)
+
+# Calcular a tabela de frequência da coluna "classe"
+tabela_frequencia <- sub_internacional %>%
+  count(classe) %>%
+  arrange(desc(n))
+parte1 <- tabela_frequencia[1:ceiling(nrow(tabela_frequencia)/2), ]
+parte2 <- tabela_frequencia[(ceiling(nrow(tabela_frequencia)/2) + 1):nrow(tabela_frequencia), ]
+tabela_com_duas_colunas <- kbl(list(parte1, parte2), align = "c") %>%
+  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+print(tabela_com_duas_colunas)
+rm(tabela_frequencia)
+rm(parte1)
+rm(parte2)
+
+# Criar o gráfico de barras da competência do STF
+sub_internacional_unico <- sub_internacional %>%
+  distinct(id, .keep_all = TRUE)
+grafico_barras <- ggplot(sub_internacional_unico, aes(x = competencia, fill = competencia)) +
+  geom_bar() +
+  labs(title = "Gráfico de Barras por Competência (Um Caso por ID)",
+       x = "Competência") +
+  theme_minimal()
+print(grafico_barras)
+rm(sub_internacional_unico)
+rm(grafico_barras)
+
+# 
+sub_internacional$ano <- as.numeric(sub_internacional$ano)
+sub_internacional$julgamento_data <- as.Date(sub_internacional$julgamento_data)
+sub_internacional$tipo <- as.factor(sub_internacional$tipo)
+sub_internacional$nome <- as.factor(sub_internacional$nome)
+sub_internacional$competencia <- as.factor(sub_internacional$competencia)
+sub_internacional$classe <- as.factor(sub_internacional$classe)
+sub_internacional$contraparte <- as.factor(sub_internacional$contraparte)
+sub_internacional$tema <- as.factor(sub_internacional$tema)
+sub_internacional$titulo <- as.factor(sub_internacional$titulo)
+sub_internacional$id <- as.factor(sub_internacional$id)
+summary(sub_internacional)
+#
+
+#Scatterplot
+dados_agrupados <- sub_internacional %>%
+  group_by(ano = year(julgamento_data), tipo, classe) %>%
+  summarise(numero_observacoes = n()) %>%
+  drop_na() # Remover linhas com valores ausentes
+simbolos <- c(16, 17, 15, 18, 0, 1, 2, 3, 4, 5, 6)
+ggplot(dados_agrupados, aes(x = ano, y = numero_observacoes, color = classe, shape = tipo)) +
+  geom_point() +
+  labs(x = "Ano da Data do Julgamento", y = "Número de Observações", color = "Classe", shape = "Tipo") +
+  ggtitle("Scatterplot do Dataset Sub Internacional") +
+  scale_shape_manual(values = simbolos)
+rm(dados_agrupados)
+rm(simbolos)
+#
+#Gráfico de barra
+dados_agrupados <- sub_internacional %>%
+  group_by(tipo, classe) %>%
+  summarise(numero_observacoes = n()) %>%
+  drop_na() # Remover linhas com valores ausentes
+ggplot(dados_agrupados, aes(x = classe, y = numero_observacoes, fill = tipo)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Classe", y = "Número de Observações", fill = "Tipo") +
+  ggtitle("Histograma Classe/Tipo") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+rm(dados_agrupados)
+###
+########
+# Montagem da rede
+rede_internacional <- sub_internacional %>%
+  group_by(classe, tipo) %>%
+  drop_na()
+
+# Criar objeto igraph a partir do dataset
+rede <- graph_from_data_frame(rede_internacional, directed = TRUE)
+plot(rede, vertex.label = NA, edge.label = NA, edge.width = 0.5, vertex.color = blues9)
+
+#
 save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
