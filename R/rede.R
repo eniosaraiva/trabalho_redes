@@ -7,7 +7,7 @@ if (!"stf" %in% installed.packages()){
 }
 library(stf)
 #
-# Download dos acórdãos do STF com o termo "internacional": 2947 observações iniciais (2325 casos distintos) reduzida para 1101 observações (552 casos) após exclusão dos casos sem citação a legislação estrangeira
+# Download dos acórdãos do STF com o termo "internacional": 2947 observações iniciais (2325 casos distintos) reduzida para 1101 observações (552 casos) após exclusão dos casos sem citação a legislação estrangeira com indicação LEG-INT na coluna documental_legislacao_citada_texto
 #Período: 06/1950 a 07/2023
 dir.create("Raw")
 
@@ -1123,6 +1123,17 @@ sub_internacional$tema <- as.factor(sub_internacional$tema)
 sub_internacional$titulo <- as.factor(sub_internacional$titulo)
 sub_internacional$id <- as.factor(sub_internacional$id)
 summary(sub_internacional)
+# Média de citação de legisção internacional de 1,9 documentos por processo. 252 processos (46,5%) só citam 1 documento.
+sub_internacional %>%
+  count(id) %>%
+  filter(n == 1) %>%
+  summarise(total_casos_unicos = n())
+sub_internacional %>% 
+  count(nome) %>%
+  group_by(nome, n) %>%
+  arrange(n) %>% 
+  arrange(desc(n))
+
 #
 
 #Scatterplot
@@ -1160,6 +1171,52 @@ rede_internacional <- sub_internacional %>%
 # Criar objeto igraph a partir do dataset
 rede <- graph_from_data_frame(rede_internacional, directed = TRUE)
 plot(rede, vertex.label = NA, edge.label = NA, edge.width = 0.5, vertex.color = blues9)
+
+# Pendências
+# finalizar nomes
+# Montagem e analise da rede
+# Teste usando igraph ou gephi
+# Escrita fundamentada na literatura sobre o tema
+####
+#Conclusão da limpeza
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_remove(nome, "\\bO\\b"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_remove_all(nome, "\\bOS\\b"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bSOBRE\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bPARA\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bDAS\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bCOM\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bE\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bA\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bAO\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bDA\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bAS\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bDO\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bEM\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\s+", " "))
+# Definir o conjunto de stopwords em português
+stopwords_pt <- stopwords("pt")
+# Aplicar a remoção de stopwords na coluna "nome"
+sub_internacional <- sub_internacional %>%
+  mutate(nome = removeWords(nome, stopwords_pt))
+#
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "PACTO SAO JOSE DA COSTA RICA CONVENCAO AMERICANA DIREITOS HUMANOS", "CONVENCAO AMERICANA DIREITOS HUMANOS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ONU ONU", "ONU"))
 
 #
 save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
