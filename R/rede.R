@@ -1207,6 +1207,14 @@ sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "\\bEM\\b", ""))
 sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "\\s+", " "))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bOU\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bNOS\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bAOS\\b", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "\\bNA\\b", ""))
 # Definir o conjunto de stopwords em português
 stopwords_pt <- stopwords("pt")
 # Aplicar a remoção de stopwords na coluna "nome"
@@ -1217,6 +1225,57 @@ sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "PACTO SAO JOSE DA COSTA RICA CONVENCAO AMERICANA DIREITOS HUMANOS", "CONVENCAO AMERICANA DIREITOS HUMANOS"))
 sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "ONU ONU", "ONU"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "NBRASIL", "BRASIL"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONCERNENTE", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ADOTADA PELA CONFERENCIA SUA TRIGESIMA SESSAO GENEBRA 19 JUNHO 1947", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "FIRMADOS NOVA YORK 22 JULHO 1946 POR OCASIAO", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO  INSPECAO TRABALHO NA INDUSTRIA NO COMERCIO OIT", "CONVENCAO  INSPECAO TRABALHO NA INDUSTRIA NO COMERCIO"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "FIRMADA CIDADE PRAIA CABO VERDE 23 NOVEMBRO 2005", ""))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ACORDO GERAL TARIFAS ADUANEIRAS COMERCIO GATT", "ACORDO GERAL TARIFAS ADUANEIRAS COMERCIO"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO PRIVILEGIOS IMUNIDADES AGENCIAS ESPECIALIZADAS NACOES UNIDAS", "CONVENCAO PRIVILEGIOS IMUNIDADES NACOES UNIDAS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO PREVENIR PUNIR ATOS TERRORISMO CONFIGURADOS DELITOS CONTRA PESSOAS EXTORSAO CONEXA QUANDO TIVEREM ELES TRANSCENDENCIA INTERNACIONAL", "CONVENCAO PREVENIR PUNIR ATOS TERRORISMO"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO ONU CONTRA CORRUPCAO", "CONVENCAO NACOES UNIDAS CONTRA CORRUPCAO"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO INTERNACIONAL TRABALHO", "CONVENCAO OIT"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO RELATIVA ABOLICAO TRABALHO FORCADO", "CONVENCAO ABOLICAO TRABALHO FORCADO OIT"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO RELATIVA SEGURANCA SAUDE TRABALHADORES AMBIENTE TRABALHO", "CONVENCAO SEGURANCA SAUDE TRABALHADORES MEIO AMBIENTE TRABALHO"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "CONVENCAO PREVENCAO CONTROLE RISCOS PROFISSIONAIS CAUSADOS PELAS SUBSTANCIAS  AGENTES CANCERIGENOS OIT", "CONVENCAO OIT PREVENCAO CONTROLE RISCOS PROFISSIONAIS CAUSADOS PELAS SUBSTANCIAS  AGENTES CANCERIGENOS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "LEG INT CVC ANO 1969 CONVENCAO AMERICANA DIREITOS HUMANOS", "CONVENCAO AMERICANA DIREITOS HUMANOS"))
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "131 CONVENCAO OIT", "CONVENCAO Nº 131 FIXACAO SALARIOS MINIMOS REFERENCIA ESPECIAL PAISES DESENVOLVIMENTO OIT"))
+
+
+
+
+sub_internacional$nome <- ifelse(grepl("IDADE MINIMA", sub_internacional$nome), "CONVENCAO IDADE MINIMA OIT", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("EXPRESSOES", sub_internacional$nome), "CONVENCAO INTERNACIONAL PROTECAO PROMOCAO DIVERSIDADE EXPRESSOES CULTURAIS", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("PACTO INTERNACIONAL DIREITOS CIVIS POLITICOS", sub_internacional$nome), "PACTO INTERNACIONAL DIREITOS CIVIS POLITICOS", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("POVOS INDIGENAS TRIBAIS", sub_internacional$nome), "CONVENCAO POVOS INDIGENAS TRIBAIS", sub_internacional$nome)
+sub_internacional$nome <- trimws(gsub("\\s+", " ", sub_internacional$nome))
+
+# Criando o subset originario e recursal
+subset_orig <- subset(sub_internacional, competencia == "originaria")
+subset_orig <- subset_orig[, -which(names(subset_orig) == "competencia")]
+
+
+subset_rec <- subset(sub_internacional, competencia == "recursal")
+subset_rec <- subset_rec[, -which(names(subset_rec) == "competencia")]
+
+
 
 #
 save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
