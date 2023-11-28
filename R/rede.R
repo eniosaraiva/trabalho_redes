@@ -1038,146 +1038,6 @@ sub_internacional <- sub_internacional %>%
 sub_internacional$tema <- gsub("DROGAS", "DROGA", sub_internacional$tema)
 #observacoes_na <- filter(sub_internacional, is.na(tema))
 
-## Tabela do dataset
-nomes_colunas <- colnames(sub_internacional)
-tabela <- kable(sub_internacional) %>%
-  add_header_above(nomes_colunas)
-print(tabela)
-rm(nomes_colunas)
-rm(tabela)
-
-# 552 processos únicos
-sub_internacional %>% 
-  distinct(id) %>% 
-  n_distinct()
-
-base_original %>% 
-  distinct(id) %>% 
-  n_distinct()
-
-# Calcular a tabela de frequência da coluna "tema"
-tabela_frequencia <- sub_internacional %>%
-  count(tema) %>%
-  arrange(desc(n))
-tabela_frequencia %>%
-  kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = FALSE)
-rm(tabela_frequencia)
-
-# Calcular a tabela de frequência da coluna "contraparte"
-tabela_frequencia <- sub_internacional %>%
-  count(contraparte) %>%
-  arrange(desc(n))
-parte1 <- tabela_frequencia[1:ceiling(nrow(tabela_frequencia)/2), ]
-parte2 <- tabela_frequencia[(ceiling(nrow(tabela_frequencia)/2) + 1):nrow(tabela_frequencia), ]
-tabela_com_duas_colunas <- kbl(list(parte1, parte2), align = "c") %>%
-  kable_styling(bootstrap_options = "striped", full_width = FALSE)
-print(tabela_com_duas_colunas)
-rm(tabela_frequencia)
-rm(parte1)
-rm(parte2)
-
-# Calcular a tabela de frequência da coluna "tipo"
-tabela_frequencia <- sub_internacional %>%
-  count(tipo) %>%
-  arrange(desc(n))
-tabela_frequencia %>%
-  kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = FALSE)
-rm(tabela_frequencia)
-
-# Calcular a tabela de frequência da coluna "classe"
-tabela_frequencia <- sub_internacional %>%
-  count(classe) %>%
-  arrange(desc(n))
-parte1 <- tabela_frequencia[1:ceiling(nrow(tabela_frequencia)/2), ]
-parte2 <- tabela_frequencia[(ceiling(nrow(tabela_frequencia)/2) + 1):nrow(tabela_frequencia), ]
-tabela_com_duas_colunas <- kbl(list(parte1, parte2), align = "c") %>%
-  kable_styling(bootstrap_options = "striped", full_width = FALSE)
-print(tabela_com_duas_colunas)
-rm(tabela_frequencia)
-rm(parte1)
-rm(parte2)
-
-# Criar o gráfico de barras da competência do STF
-sub_internacional_unico <- sub_internacional %>%
-  distinct(id, .keep_all = TRUE)
-grafico_barras <- ggplot(sub_internacional_unico, aes(x = competencia, fill = competencia)) +
-  geom_bar() +
-  labs(title = "Gráfico de Barras por Competência (Um Caso por ID)",
-       x = "Competência") +
-  theme_minimal()
-print(grafico_barras)
-rm(sub_internacional_unico)
-rm(grafico_barras)
-
-# 
-sub_internacional$ano <- as.numeric(sub_internacional$ano)
-sub_internacional$julgamento_data <- as.Date(sub_internacional$julgamento_data)
-sub_internacional$tipo <- as.factor(sub_internacional$tipo)
-sub_internacional$nome <- as.factor(sub_internacional$nome)
-sub_internacional$competencia <- as.factor(sub_internacional$competencia)
-sub_internacional$classe <- as.factor(sub_internacional$classe)
-sub_internacional$contraparte <- as.factor(sub_internacional$contraparte)
-sub_internacional$tema <- as.factor(sub_internacional$tema)
-sub_internacional$titulo <- as.factor(sub_internacional$titulo)
-sub_internacional$id <- as.factor(sub_internacional$id)
-summary(sub_internacional)
-# Média de citação de legisção internacional de 1,9 documentos por processo. 252 processos (46,5%) só citam 1 documento.
-sub_internacional %>%
-  count(id) %>%
-  filter(n == 1) %>%
-  summarise(total_casos_unicos = n())
-sub_internacional %>% 
-  count(nome) %>%
-  group_by(nome, n) %>%
-  arrange(n) %>% 
-  arrange(desc(n))
-
-#
-
-#Scatterplot
-dados_agrupados <- sub_internacional %>%
-  group_by(ano = year(julgamento_data), tipo, classe) %>%
-  summarise(numero_observacoes = n()) %>%
-  drop_na() # Remover linhas com valores ausentes
-simbolos <- c(16, 17, 15, 18, 0, 1, 2, 3, 4, 5, 6)
-ggplot(dados_agrupados, aes(x = ano, y = numero_observacoes, color = classe, shape = tipo)) +
-  geom_point() +
-  labs(x = "Ano da Data do Julgamento", y = "Número de Observações", color = "Classe", shape = "Tipo") +
-  ggtitle("Scatterplot do Dataset Sub Internacional") +
-  scale_shape_manual(values = simbolos)
-rm(dados_agrupados)
-rm(simbolos)
-#
-#Gráfico de barra
-dados_agrupados <- sub_internacional %>%
-  group_by(tipo, classe) %>%
-  summarise(numero_observacoes = n()) %>%
-  drop_na() # Remover linhas com valores ausentes
-ggplot(dados_agrupados, aes(x = classe, y = numero_observacoes, fill = tipo)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Classe", y = "Número de Observações", fill = "Tipo") +
-  ggtitle("Histograma Classe/Tipo") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-rm(dados_agrupados)
-###
-########
-# Montagem da rede
-rede_internacional <- sub_internacional %>%
-  group_by(classe, tipo) %>%
-  drop_na()
-
-# Criar objeto igraph a partir do dataset
-rede <- graph_from_data_frame(rede_internacional, directed = TRUE)
-plot(rede, vertex.label = NA, edge.label = NA, edge.width = 0.5, vertex.color = blues9)
-
-# Pendências
-# finalizar nomes
-# Montagem e analise da rede
-# Teste usando igraph ou gephi
-# Escrita fundamentada na literatura sobre o tema
-####
 #Conclusão da limpeza
 sub_internacional <- sub_internacional %>%
   mutate(nome = str_remove(nome, "\\bO\\b"))
@@ -1257,25 +1117,262 @@ sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "LEG INT CVC ANO 1969 CONVENCAO AMERICANA DIREITOS HUMANOS", "CONVENCAO AMERICANA DIREITOS HUMANOS"))
 sub_internacional <- sub_internacional %>%
   mutate(nome = str_replace_all(nome, "131 CONVENCAO OIT", "CONVENCAO Nº 131 FIXACAO SALARIOS MINIMOS REFERENCIA ESPECIAL PAISES DESENVOLVIMENTO OIT"))
-
-
-
-
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "6 CONVENCAO RELATIVA DIREITOS CRIANCAS", "CONVENCAO DIREITOS CRIANCAS"))
+sub_internacional$nome <- ifelse(sub_internacional$nome == "CONVENCAO OIT" & sub_internacional$ano == "1948", "CONVENCAO OIT 087 LIBERDADE SINDICAL PROTECAO DIREITO SINDICALIZACAO", sub_internacional$nome)
+sub_internacional <- sub_internacional %>%
+  mutate(nome = str_replace_all(nome, "ACORDO EXTRADICAO ESTADOS PARTES MERCOSUL BOLIVIA CHILE", "ACORDO EXTRADICAO ESTADOS PARTES MERCOSUL"))
+sub_internacional$nome <- ifelse(grepl("CONVENCAO EUROPEIA DIREITOS HUMANOS", sub_internacional$nome), "CONVENCAO EUROPEIA DIREITOS HUMANOS", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("MERIDA", sub_internacional$nome), "CONVENCAO NACOES UNIDAS CONTRA CORRUPCAO CONVENCAO", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("TRATADO EXTRADICAO MERCOSUL", sub_internacional$nome), "TRATADO EXTRADICAO MERCOSUL", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("CONVENCAO LIBERDADE SINDICAL PROTECAO DIREITO SINDICAL OIT", sub_internacional$nome), "CONVENCAO OIT 087 LIBERDADE SINDICAL PROTECAO DIREITO SINDICALIZACAO", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("173", sub_internacional$nome), "CONVENCAO OIT 173 PROTECAO CREDITOS TRABALHISTAS INSOLVENCIA EMPREGADOR", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("70/", sub_internacional$nome), "REGRAS MINIMAS NACOES UNIDAS TRATAMENTO RECLUSOS", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("162", sub_internacional$nome), "CONVENCAO Nº 162 OIT UTILIZACAO ASBESTO SEGURANCA", sub_internacional$nome)
 sub_internacional$nome <- ifelse(grepl("IDADE MINIMA", sub_internacional$nome), "CONVENCAO IDADE MINIMA OIT", sub_internacional$nome)
 sub_internacional$nome <- ifelse(grepl("EXPRESSOES", sub_internacional$nome), "CONVENCAO INTERNACIONAL PROTECAO PROMOCAO DIVERSIDADE EXPRESSOES CULTURAIS", sub_internacional$nome)
 sub_internacional$nome <- ifelse(grepl("PACTO INTERNACIONAL DIREITOS CIVIS POLITICOS", sub_internacional$nome), "PACTO INTERNACIONAL DIREITOS CIVIS POLITICOS", sub_internacional$nome)
 sub_internacional$nome <- ifelse(grepl("POVOS INDIGENAS TRIBAIS", sub_internacional$nome), "CONVENCAO POVOS INDIGENAS TRIBAIS", sub_internacional$nome)
 sub_internacional$nome <- trimws(gsub("\\s+", " ", sub_internacional$nome))
+sub_internacional$nome <- ifelse(grepl("CONVENCAO PROTECAO MATERNIDADE", sub_internacional$nome), "CONVENCAO PROTECAO MATERNIDADE OIT", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("CONVENCAO EUROPEIA DIREITOS HOMEM", sub_internacional$nome), "CONVENCAO EUROPEIA DIREITOS HUMANOS", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("Nº1 TRATADO EXTRADICAO BRASIL PORTUGAL", sub_internacional$nome), "TRATADO EXTRADICAO BRASIL PORTUGAL", sub_internacional$nome)
+sub_internacional$nome <- ifelse(grepl("CONVENCAO VIENA CONTRA TRAFICO ILICITO ENTORPECENTES SUBSTANCIAS PSICOTROPICAS", sub_internacional$nome), "CONVENCAO CONTRA TRAFICO ILICITO ENTORPECENTES SUBSTANCIAS PSICOTROPICAS", sub_internacional$nome)
+
+#salvando
+save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
+write.csv(sub_internacional, "sub_internacional.csv", row.names = FALSE)
+dir.create("Dados")
+
+# Ajuste das variáveis
+sub_internacional$ano <- as.numeric(sub_internacional$ano)
+sub_internacional$julgamento_data <- as.Date(sub_internacional$julgamento_data)
+sub_internacional$tipo <- as.factor(sub_internacional$tipo)
+sub_internacional$nome <- as.factor(sub_internacional$nome)
+sub_internacional$competencia <- as.factor(sub_internacional$competencia)
+sub_internacional$classe <- as.factor(sub_internacional$classe)
+sub_internacional$contraparte <- as.factor(sub_internacional$contraparte)
+sub_internacional$tema <- as.factor(sub_internacional$tema)
+sub_internacional$titulo <- as.factor(sub_internacional$titulo)
+sub_internacional$id <- as.factor(sub_internacional$id)
+
 
 # Criando o subset originario e recursal
 subset_orig <- subset(sub_internacional, competencia == "originaria")
 subset_orig <- subset_orig[, -which(names(subset_orig) == "competencia")]
 
-
 subset_rec <- subset(sub_internacional, competencia == "recursal")
 subset_rec <- subset_rec[, -which(names(subset_rec) == "competencia")]
 
+## Tabela do dataset
+nomes_colunas <- colnames(sub_internacional)
+tabela <- kable(sub_internacional) %>%
+  add_header_above(nomes_colunas)
+write.table(tabela, file = "Dados/sub_internacional.html", sep = "\t", quote = FALSE, row.names = FALSE)
 
+nomes_colunas <- colnames(subset_orig)
+tabela <- kable(subset_orig) %>%
+  add_header_above(nomes_colunas)
+write.table(tabela, file = "Dados/subset_orig.html", sep = "\t", quote = FALSE, row.names = FALSE)
+
+nomes_colunas <- colnames(subset_rec)
+tabela <- kable(subset_rec) %>%
+  add_header_above(nomes_colunas)
+write.table(tabela, file = "Dados/subset_rec.html", sep = "\t", quote = FALSE, row.names = FALSE)
+
+rm(nomes_colunas)
+rm(tabela)
+
+# 552 processos únicos. 2325 na base original. 384 no subset original e 168 no subset recursal
+sub_internacional %>% 
+  distinct(id) %>% 
+  n_distinct()
+
+base_original %>% 
+  distinct(id) %>% 
+  n_distinct()
+
+subset_orig%>% 
+  distinct(id) %>% 
+  n_distinct()
+
+subset_rec %>% 
+  distinct(id) %>% 
+  n_distinct()
+
+# Calcular a tabela de frequência da coluna "tema"
+tabela_frequencia <- table(sub_internacional$tema)
+tabela_frequencia <- as.data.frame(tabela_frequencia)
+colnames(tabela_frequencia) <- c("Tema", "Frequência")
+tabela_frequencia <- tabela_frequencia %>%
+  arrange(desc(Frequência))
+
+tabela_frequencia <- kable(tabela_frequencia, col.names = c("Tema", "Frequência"),
+  kable_styling("striped", full_width = FALSE),
+  column_spec(2, width = "5cm")
+print(tabela_frequencia)
+
+# Calcular a tabela de frequência da coluna "contraparte"
+tabela_frequencia <- sub_internacional %>%
+  count(contraparte) %>%
+  arrange(desc(n)) %>%
+  head(20)
+tabela_frequencia <- as.data.frame(tabela_frequencia)
+colnames(tabela_frequencia) <- c("Contraparte", "n")
+
+tabela_formatada <- kable(tabela_frequencia) %>%
+  kable_styling("striped", full_width = FALSE)
+print(tabela_formatada)
+
+
+# Calcular a tabela de frequência da coluna "tipo"
+tabela_frequencia <- sub_internacional %>%
+  count(tipo) %>%
+  arrange(desc(n))
+tabela_frequencia %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+
+# Calcular a tabela de frequência da coluna "classe"
+tabela_frequencia <- sub_internacional %>%
+  count(classe) %>%
+  arrange(desc(n))
+parte1 <- tabela_frequencia[1:ceiling(nrow(tabela_frequencia)/2), ]
+parte2 <- tabela_frequencia[(ceiling(nrow(tabela_frequencia)/2) + 1):nrow(tabela_frequencia), ]
+tabela_com_duas_colunas <- kbl(list(parte1, parte2), align = "c") %>%
+  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+print(tabela_com_duas_colunas)
+rm(tabela_frequencia)
+rm(parte1)
+rm(parte2)
+rm(tabela_com_duas_colunas)
+
+# Criar o gráfico de barras da competência do STF
+sub_internacional_unico <- sub_internacional %>%
+  distinct(id, .keep_all = TRUE)
+grafico_barras <- ggplot(sub_internacional_unico, aes(x = competencia, fill = competencia)) +
+  geom_bar() +
+  labs(x = "Competência", y = "Contagem") +
+  theme_minimal()
+print(grafico_barras)
+rm(sub_internacional_unico)
+rm(grafico_barras)
+
+# 
+summary(sub_internacional)
+summary(subset_orig)
+summary(subset_rec)
+data_mais_antiga <- min(sub_internacional$julgamento_data)
+data_mais_recente <- max(sub_internacional$julgamento_data)
+print(data_mais_antiga)
+print(data_mais_recente)
+
+# Média de citação de legisção internacional de 1,9 documentos por processo. 252 processos (46,5%) só citam 1 documento.
+# 1 processo cita 15. 1 cita 13. 1 cita 9. 3 citam 8. 6 citam 7. 7 citam 6. 13 citam 5. 21 citam 4. 61 citam 3. 186 citam 2. 252 citam 1.
+sub_internacional %>%
+  count(id) %>% 
+  distinct()
+sub_internacional %>%
+  count(id) %>%
+  arrange(desc(n))
+sub_internacional %>%
+  count(id) %>%
+  filter(n == 1) %>%
+  summarise(total_casos_unicos = n())
+sub_internacional %>% 
+  count(nome) %>%
+  group_by(nome, n) %>%
+  arrange(n) %>% 
+  arrange(desc(n))
+resultado <- sub_internacional %>%
+  count(id) %>%
+  arrange(desc(n)) %>%
+  group_by(n) %>%
+  summarize(observacoes = n())
+print(resultado)
+
+ggplot(resultado, aes(x = n, y = observacoes)) +
+  geom_line() +
+  xlab("Número de citações de documentos internacionais") +
+  ylab("Quantidade de processos") +
+  ggtitle("Quantidade de processos x Quantidade de citações")
+
+#Scatterplot
+dados_agrupados <- sub_internacional %>%
+  group_by(ano = year(julgamento_data), tipo, classe) %>%
+  summarise(numero_observacoes = n()) %>%
+  drop_na() # Remover linhas com valores ausentes
+simbolos <- c(16, 17, 15, 18, 0, 1, 2, 3, 4, 5, 6)
+ggplot(dados_agrupados, aes(x = ano, y = numero_observacoes, color = classe, shape = tipo)) +
+  geom_point() +
+  labs(x = "Ano da Data do Julgamento", y = "Número de Observações", color = "Classe", shape = "Tipo") +
+  #ggtitle("Scatterplot do Dataset Sub Internacional") +
+  scale_shape_manual(values = simbolos)
+rm(dados_agrupados)
+rm(simbolos)
+#
+#Gráfico de barra
+dados_agrupados <- sub_internacional %>%
+  group_by(tipo, classe) %>%
+  summarise(numero_observacoes = n()) %>%
+  drop_na() # Remover linhas com valores ausentes
+ggplot(dados_agrupados, aes(x = classe, y = numero_observacoes, fill = tipo)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Classe", y = "Número de Observações", fill = "Tipo") +
+  #ggtitle("Histograma Classe/Tipo") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+rm(dados_agrupados)
+rm(grafico_barras)
+rm(resultado)
+rm(data_mais_antiga)
+rm(data_mais_recente)
+###
+########
+# Montagem da rede
+rede_internacional <- sub_internacional %>%
+  group_by(classe, nome) %>%
+  drop_na()
+
+# Criar objeto igraph a partir do dataset
+rede <- graph_from_data_frame(rede_internacional, directed = TRUE)
+rede <- simplify(rede, edge.attr.comb=list(weight="sum","ignore"))
+#métricas
+edge_density(rede, loops=F)
+ecount(rede)/(vcount(rede)*(vcount(rede)-1))
+reciprocity(rede)
+dyad_census(rede) 
+triad_census(rede)
+diameter(rede, directed=T, weights=NA)
+get_diameter(rede, directed=T)
+deg <- degree(rede, mode="all") 
+plot(rede, vertex.size=deg*3, vertex.label = NA)
+hist(deg, breaks=1:vcount(rede)-1, main="Histogram of node degree")
+deg.dist <- degree_distribution(rede, cumulative=T, mode="all") 
+plot( x=0:max(deg), y=1-deg.dist, pch=19, cex=1.2, col="orange",
+                                                                     xlab="Degree", ylab="Cumulative Frequency")
+degree(rede, mode="in")
+centr_degree(rede, mode="in", normalized=T)
+closeness(rede, mode="all", weights=NA) 
+centr_clo(rede, mode="all", normalized=T)
+betweenness(rede, directed=T, weights=NA) 
+edge_betweenness(rede, directed=T, weights=NA) 
+centr_betw(rede, directed=T, normalized=T)
+#
+hs <- hub_score(rede, weights=NA)$vector
+as <- authority_score(rede, weights=NA)$vector
+par(mfrow=c(1,2))
+plot(rede, vertex.size=hs*50, main="Hubs", vertex.label = NA) 
+plot(rede, vertex.size=as*30, main="Authorities", vertex.label = NA)
+dev.off()
+mean_distance(rede, directed=T)
+distances(rede) # with edge weights 
+distances(rede, weights=NA) # ignore weights
+#
+ceb <- cluster_edge_betweenness(rede) 
+dendPlot(ceb, mode="hclust")
+#
+write.graph(rede, "rede.graphml", format = "graphml")
+plot(rede, vertex.label = NA, edge.label = NA, edge.width = 0.5, vertex.color = blues9, edge.arrow.size=.5, vertex.size=10, vertex.label.color="black", vertex.label.cex=0.8, vertex.label.dist=2, edge.curved=0.2, layout=layout.fruchterman.reingold)
 
 #
-save(sub_internacional, file = "Bases/02_sub_internacional.rdata")
+
